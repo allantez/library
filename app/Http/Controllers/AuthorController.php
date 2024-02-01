@@ -7,59 +7,75 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Display a list of authors.
     public function index()
     {
-        //
+        $authors = Author::with('books')->get();
+
+        return response()->json(['authors' => $authors]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store a newly created author.
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'gender' => 'required',
+            'age' => 'required|integer',
+            'country' => 'required',
+            'genre' => 'required',
+        ]);
+
+        $author = Author::create($request->all());
+
+        return response()->json(['author' => $author], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Author $author)
+    // Display the specified resource.
+    public function show($id)
     {
-        //
+        $author = Author::with('books')->find($id);
+
+        if (!$author) {
+            return response()->json(['message' => 'Author not found'], 404);
+        }
+
+        return response()->json(['author' => $author]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Author $author)
+    // Update the specified author details.
+    public function update(Request $request, $id)
     {
-        //
+        $author = Author::find($id);
+
+        if (!$author) {
+            return response()->json(['message' => 'Author not found'], 404);
+        }
+
+        $this->validate($request, [
+            'name' => 'required',
+            'gender' => 'required',
+            'age' => 'required|integer',
+            'country' => 'required',
+            'genre' => 'required',
+        ]);
+
+        $author->update($request->all());
+
+        return response()->json(['author' => $author]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Author $author)
+    // Delete the specified author.
+    public function destroy($id)
     {
-        //
-    }
+        $author = Author::find($id);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Author $author)
-    {
-        //
+        if (!$author) {
+            return response()->json(['message' => 'Author not found'], 404);
+        }
+
+        $author->delete();
+
+        return response()->json(['message' => 'Author deleted']);
     }
 }

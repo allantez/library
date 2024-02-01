@@ -7,59 +7,71 @@ use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Display a listof books.
     public function index()
     {
-        //
+        $books = Book::with('author')->get();
+
+        return response()->json(['books' => $books]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store a newly created book.
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'isbn' => 'required',
+            'author_id' => 'required|exists:authors,id',
+        ]);
+
+        $book = Book::create($request->all());
+
+        return response()->json(['book' => $book], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Book $book)
+    // Display the specified book.
+    public function show($id)
     {
-        //
+        $book = Book::with('author')->find($id);
+
+        if (!$book) {
+            return response()->json(['message' => 'Book not found'], 404);
+        }
+
+        return response()->json(['book' => $book]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Book $book)
+    // Update the specified book.
+    public function update(Request $request, $id)
     {
-        //
+        $book = Book::find($id);
+
+        if (!$book) {
+            return response()->json(['message' => 'Book not found'], 404);
+        }
+
+        $this->validate($request, [
+            'name' => 'required',
+            'isbn' => 'required',
+            'author_id' => 'required|exists:authors,id',
+        ]);
+
+        $book->update($request->all());
+
+        return response()->json(['book' => $book]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Book $book)
+    // Delete the specified book.
+    public function destroy($id)
     {
-        //
-    }
+        $book = Book::find($id);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Book $book)
-    {
-        //
+        if (!$book) {
+            return response()->json(['message' => 'Book not found'], 404);
+        }
+
+        $book->delete();
+
+        return response()->json(['message' => 'Book deleted']);
     }
 }
