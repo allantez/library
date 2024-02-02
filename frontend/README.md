@@ -17,13 +17,13 @@ This is the frontend repository for the Library Management System, a web applica
    git clone https://github.com/allantez/library.git
    
 2. Navigate to the project directory in your terminal
-   cd library/frontend
+   - cd library/frontend
    
 3. Install dependencies
-   npm install
+   - npm install
 
 4. Start the development server:
-   npm start
+   - npm start
 
 # Technologies Used
 React
