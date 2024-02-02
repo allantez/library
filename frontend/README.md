@@ -2,15 +2,6 @@
 
 This is the frontend repository for the Library Management System, a web application to manage a list of books and authors.
 
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Features
 
 - View a list of authors and books
