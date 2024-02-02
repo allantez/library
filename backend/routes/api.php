@@ -16,9 +16,25 @@ use App\Http\Controllers\BookController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/', function () {
+    return response()->json([
+        'message' => 'Welcome to Your Library Management System API',
+        'version' => '1.0',
+    ]);
 });
 
-Route::apiResource('authors', AuthorController::class);
-Route::apiResource('books', BookController::class);
+// Author Management
+Route::get('/authors', [AuthorController::class, 'index']);
+Route::post('/authors', [AuthorController::class, 'store']);
+Route::get('/authors/{id}', [AuthorController::class, 'show']);
+Route::get('/authors/edit/{id}', [AuthorController::class, 'edit']);
+Route::put('/authors/{id}', [AuthorController::class, 'update']);
+Route::delete('/authors/{id}', [AuthorController::class, 'destroy']);
+
+// Book Management
+Route::get('/books', [BookController::class, 'index']);
+Route::post('/books', [BookController::class, 'store']);
+Route::get('/books/{id}', [BookController::class, 'show']);
+Route::get('/books/edit/{id}', [BookController::class, 'edit']);
+Route::put('/books/{id}', [BookController::class, 'update']);
+Route::delete('/books/{id}', [BookController::class, 'destroy']);

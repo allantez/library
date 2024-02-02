@@ -43,6 +43,18 @@ class AuthorController extends Controller
         return response()->json(['author' => $author]);
     }
 
+    // Edit the specified author.
+    public function edit($id)
+    {
+        $author = Author::find($id);
+
+        if (!$author) {
+            return response()->json(['message' => 'Author not found'], 404);
+        }
+
+        return response()->json(['author' => $author, 'debug' => 'Edit request processed']);
+    }
+
     // Update the specified author details.
     public function update(Request $request, $id)
     {
@@ -60,6 +72,7 @@ class AuthorController extends Controller
             'genre' => 'required',
         ]);
 
+        // Instead of creating a new author, update the existing one.
         $author->update($request->all());
 
         return response()->json(['author' => $author]);
